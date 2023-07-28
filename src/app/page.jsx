@@ -1,91 +1,71 @@
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from './page.module.css'
-
-const inter = Inter({ subsets: ['latin'] })
-
+"use client";
+import { Fragment, useState } from "react";
+import { AiOutlineLeftCircle, AiOutlineRightCircle } from "react-icons/ai";
 export default function Home() {
+  const [cur, setCur] = useState(1);
+  const [auto, setAuto] = useState(true);
+  let slider = document.getElementsByClassName("slider");
+  let width = cur * 300;
+
+  const sliderImage = [
+    { src: "1.jpg" },
+    { src: "2.jpg" },
+    { src: "3.jpg" },
+    { src: "4.jpg" },
+    { src: "5.jpg" },
+    { src: "6.jpg" },
+  ];
+
+  const next = () => {
+    if (cur !== sliderImage.length - 1) {
+      slider[0].style.transform = `translateX(-${width}px)`;
+      setCur(cur + 1);
+      console.log(cur);
+    } else {
+      setCur(0);
+      console.log(cur);
+    }
+  };
+
+  const prev = () => {
+    if (cur === 1) {
+      setCur(1);
+      slider[0].style.transform = `translateX(-${width}px)`;
+      console.log(cur);
+    }
+  };
+
+  // auto &&
+  //   setInterval(() => {
+  //     next();
+  //   }, 1000);
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.jsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <Fragment>
+      <div className="container">
+        <div className="slider-wrapper">
+          <div className="slider">
+            {sliderImage.map((slide) => {
+              return (
+                <div className="item-wrapper" key={slide.src}>
+                  <img
+                    src={slide.src}
+                    alt={slide.src.substring(0, 1) + "-img"}
+                    onClick={next}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <div className="arrows">
+          <div className="prev" onClick={prev}>
+            <AiOutlineLeftCircle />
+          </div>
+          <div className="next" onClick={next}>
+            <AiOutlineRightCircle />
+          </div>
         </div>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-        </div>
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    </Fragment>
+  );
 }
